@@ -5,7 +5,8 @@ import random
 def make_registrations(person_ids, practice_ids):
     rows = []
     for rank, person_id in enumerate(person_ids, start=1):
-        registration_date = date(2018 + rank, random.randint(1, 12), random.randint(1, 28))
+        
+        registration_date = date(random.randint(2015,2025), random.randint(1, 12), random.randint(1, 28))
         dereg = datetime(2099, 12, 31, 0, 0, 0)
         rows.append(
             (

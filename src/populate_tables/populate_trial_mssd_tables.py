@@ -33,8 +33,8 @@ try:
     cursor.execute("DELETE FROM dbo.Practice")
     cursor.execute("DELETE FROM dbo.Person")
 
-    practices = make_practices()
-    people = make_people()
+    practices = make_practices(n_practices=config["n_practices"])
+    people = make_people(n_persons=config["n_persons"])
 
     cursor.executemany(
         """
@@ -82,7 +82,7 @@ try:
         (PersonID, PracticeID, EventDate, SnomedConceptID, Term, RegFlag)
         VALUES (?, ?, ?, ?, ?, ?)
         """,
-        make_events(person_ids, practice_ids),
+        make_events(person_ids, practice_ids, config),
     )
 
     cursor.executemany(
