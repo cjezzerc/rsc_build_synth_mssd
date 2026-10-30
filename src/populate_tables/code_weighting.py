@@ -2,11 +2,28 @@ import tomllib
 import random
 import time
 
+import pyodbc
+
 def read_disease_codelist_file(filename=None):
     concepts = {}
     for line in open(filename).readlines()[1:]:
         condition_id, concept_id, condition_name, term = line.split("\t")
         concepts[concept_id] = term
+    return concepts
+
+
+def read_disease_codelist_table(config=None, table_name="DiseaseCodelist"):
+    concepts = {}
+    connection = pyodbc.connect(config["connection_string"])
+    cursor = connection.cursor()
+    cursor.execute(
+        f"SELECT ConditionID, ConceptID, ConditionName, Term FROM dbo.{table_name}"
+    )
+    for condition_id, concept_id, condition_name, term in cursor.fetchall():
+        concepts[str(concept_id)] = term
+    cursor.close()
+    connection.close()
+
     return concepts
 
 def read_epd_file(filename=None):
@@ -25,13 +42,13 @@ def read_snomed_usage_file(filename=None):
         counts[snomed_concept_id] = int(usage)
     return counts
 
-def generate_weighted_concept_occurrences(config_file=None, n_occurrences=None):
+def generate_weighted_concept_occurrences(config=None, n_occurrences=None):
 
-    config = tomllib.load(open("config.toml", "rb"))
+    # config = tomllib.load(open("config.toml", "rb"))
 
-    non_meds_filename = (
-        f"{config["reference_file_directory"]}/{config["disease_codelist_file"]}"
-    )
+    # non_meds_filename = (
+    #     f"{config["reference_file_directory"]}/{config["disease_codelist_file"]}"
+    # )
 
     meds_filename = (
         f"{config["reference_file_directory"]}/{config["prescription_codelist_file"]}"
@@ -43,7 +60,8 @@ def generate_weighted_concept_occurrences(config_file=None, n_occurrences=None):
         f"{config["reference_file_directory"]}/{config["SNOMED_code_usage_file"]}"
     )
 
-    non_meds_concepts = read_disease_codelist_file(filename=non_meds_filename)
+    # non_meds_concepts = read_disease_codelist_file(filename=non_meds_filename)
+    non_meds_concepts = read_disease_codelist_table(config=config)
     meds_concepts = read_disease_codelist_file(filename=meds_filename)
     epd_counts = read_epd_file(filename=epd_filename)
     snomed_counts = read_snomed_usage_file(filename=snomed_usage_filename)

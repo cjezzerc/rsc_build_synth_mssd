@@ -106,20 +106,20 @@ CREATE TABLE dbo.ImmunisationByName (
 );
 
 
--- IF OBJECT_ID('dbo.DiseaseCodeList', 'U') IS NOT NULL DROP TABLE dbo.DiseaseCodeList;
--- CREATE TABLE dbo.DiseaseCodeList (
---     [ConditionID] smallint NOT NULL,
---     [ConceptID] bigint NOT NULL,
---     [ConditionName] varchar(50) NOT NULL,
---     [Term] varchar(255) NOT NULL
--- );
--- 
+IF OBJECT_ID('dbo.DiseaseCodeList', 'U') IS NOT NULL DROP TABLE dbo.DiseaseCodeList;
+CREATE TABLE dbo.DiseaseCodeList (
+    [ConditionID] smallint NOT NULL,
+    [ConceptID] bigint NOT NULL,
+    [ConditionName] varchar(50) NOT NULL,
+    [Term] varchar(255) NOT NULL
+);
 
--- IF OBJECT_ID('dbo.PrescriptionCodeList', 'U') IS NOT NULL DROP TABLE dbo.PrescriptionCodeList;
--- CREATE TABLE dbo.PrescriptionCodeList (
---     [ConditionID] smallint NOT NULL,
---     [ConceptID] bigint NOT NULL,
---     [ConditionName] varchar(50) NOT NULL,
---     [Term] varchar(255) NOT NULL
--- );
+
+IF OBJECT_ID('dbo.PrescriptionCodeList', 'U') IS NOT NULL DROP TABLE dbo.PrescriptionCodeList;
+CREATE TABLE dbo.PrescriptionCodeList (
+    [ConditionID] smallint NOT NULL,
+    [ConceptID] bigint NOT NULL,
+    [ConditionName] varchar(50) NOT NULL,
+    [Term] varchar(255) NOT NULL
+);
 

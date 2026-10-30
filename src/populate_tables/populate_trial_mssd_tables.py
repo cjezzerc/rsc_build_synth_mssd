@@ -22,6 +22,7 @@ random.seed(42)
 connection = pyodbc.connect(config["connection_string"])
 
 cursor = connection.cursor()
+cursor.fast_executemany=True
 
 try:
     # Clear existing data in child-to-parent order for reruns.
@@ -82,7 +83,7 @@ try:
         (PersonID, PracticeID, EventDate, SnomedConceptID, Term, RegFlag)
         VALUES (?, ?, ?, ?, ?, ?)
         """,
-        make_events(person_ids, practice_ids, config),
+        make_events(person_ids, practice_ids, config=config),
     )
 
     cursor.executemany(
@@ -106,9 +107,10 @@ try:
 
     connection.commit()
 
-    print(
-        "Inserted 10 practices, 5 people, 50 events, 50 prescriptions, 15 immunisations."
-    )
+    print(f'n_persons: {config["n_persons"]}')
+    print(f'n_practices: {config["n_practices"]}')
+    print(f'n_events_per_person: {config["n_events_per_person"]}')
+
 except Exception:
     connection.rollback()
     raise

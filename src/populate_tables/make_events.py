@@ -9,15 +9,16 @@ except ImportError:
     from random_date_between import random_date_between
 
 
-def make_events(person_ids, practice_ids, config_file=None):
+def make_events(person_ids, practice_ids, config=None):
 
-    gwco=generate_weighted_concept_occurrences(config_file=config_file, n_occurrences=10*len(person_ids))
+    n_events_per_person=config["n_events_per_person"]
+    
+    gwco=generate_weighted_concept_occurrences(config=config, n_occurrences=n_events_per_person*len(person_ids))
 
-    events_per_person=10
     rows = []
     for i_person, person_id in enumerate(person_ids):
-        for i_event in range(events_per_person):
-            concept_id, term, count=gwco[i_person*events_per_person + i_event]
+        for i_event in range(n_events_per_person):
+            concept_id, term, count=gwco[i_person*n_events_per_person + i_event]
             rows.append(
                 (
                     person_id,
